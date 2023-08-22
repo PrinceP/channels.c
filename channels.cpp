@@ -66,22 +66,47 @@ private:
 
 		// Helper functions to operate on the buffer variant
 		bool empty(int id) const {
-				return std::visit([id](const auto& b) { return b[id].empty(); }, buffer_);
+			if (use_vector_) {
+				const auto& queues = std::get<std::vector<std::queue<value_type>>>(buffer_);
+				return queues[id].empty();
+			} else {
+				return std::get<std::queue<value_type>>(buffer_).empty();
+			}
 		}
 
 		std::size_t size(int id) const {
-				return std::visit([id](const auto& b) { return b[id].size(); }, buffer_);
+			if (use_vector_) {
+				const auto& queues = std::get<std::vector<std::queue<value_type>>>(buffer_);
+				return queues[id].size();
+			} else {
+				return std::get<std::queue<value_type>>(buffer_).size();
+			}
 		}
 
 		value_type front(int id) const {
-				return std::visit([id](const auto& b) { return b[id].front(); }, buffer_);
+			if (use_vector_) {
+				const auto& queues = std::get<std::vector<std::queue<value_type>>>(buffer_);
+				return queues[id].front();
+			} else {
+				return std::get<std::queue<value_type>>(buffer_).front();
+			}
 		}
 
 		void pop(int id) {
-				std::visit([id](auto& b) { b[id].pop(); }, buffer_);
+			if (use_vector_) {
+				auto& queues = std::get<std::vector<std::queue<value_type>>>(buffer_);
+				queues[id].pop();
+			} else {
+				std::get<std::queue<value_type>>(buffer_).pop();
+			}
 		}
 
 		void push(int id, value_type val) {
-				std::visit([id, &val](auto& b) { b[id].push(std::move(val)); }, buffer_);
+			if (use_vector_) {
+				auto& queues = std::get<std::vector<std::queue<value_type>>>(buffer_);
+				queues[id].push(std::move(val));
+			} else {
+				std::get<std::queue<value_type>>(buffer_).push(std::move(val));
+			}
 		}
 };
