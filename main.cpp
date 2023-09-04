@@ -27,8 +27,13 @@ int main()
 	Channel<int> channel_with_vector(30, 3);
 	std::vector<Channel<int>> channels;
 
-	// TODO: Not working
-	channels.push_back(channel_with_vector);
+	//TODO: Make it work
+	// Create a vector of channels
+	std::vector<Channel<int>> channels;
+
+	// Push a copy of channel_with_vector into channels
+	channels.push_back(channel_with_vector);  // This will invoke the copy constructor
+
 
 	std::thread producer_thread1(producer_main, std::ref(channel_with_vector), 10, 1, 0);
 	std::thread producer_thread2(producer_main, std::ref(channel_with_vector), 10, 2, 1);
