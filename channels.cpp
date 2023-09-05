@@ -20,47 +20,47 @@ public:
 								buffer_ = std::vector<std::queue<value_type>>(vector_size_);
 						}
 				}
-		// Copy constructor
-		Channel(const Channel& other) {
-			std::scoped_lock locker(other.mtx_);
-			max_length_ = other.max_length_;
-			vector_size_ = other.vector_size_;
-			use_vector_ = other.use_vector_;
-			closed_ = other.closed_;
+		// // Copy constructor
+		// Channel(const Channel& other) {
+		// 	std::scoped_lock locker(other.mtx_);
+		// 	max_length_ = other.max_length_;
+		// 	vector_size_ = other.vector_size_;
+		// 	use_vector_ = other.use_vector_;
+		// 	closed_ = other.closed_;
 
-			if (use_vector_) {
-				const auto& other_queues = std::get<std::vector<std::queue<value_type>>>(other.buffer_);
-				buffer_ = other_queues;  // Copy the contents
-			} else {
-				const auto& other_queue = std::get<std::queue<value_type>>(other.buffer_);
-				buffer_ = other_queue;  // Copy the contents
-			}
-		}
+		// 	if (use_vector_) {
+		// 		const auto& other_queues = std::get<std::vector<std::queue<value_type>>>(other.buffer_);
+		// 		buffer_ = other_queues;  // Copy the contents
+		// 	} else {
+		// 		const auto& other_queue = std::get<std::queue<value_type>>(other.buffer_);
+		// 		buffer_ = other_queue;  // Copy the contents
+		// 	}
+		// }
 
-		// Copy assignment operator
-		Channel& operator=(const Channel& other) {
-			if (this == &other) {
-				return *this;  // Handle self-assignment
-			}
+		// // Copy assignment operator
+		// Channel& operator=(const Channel& other) {
+		// 	if (this == &other) {
+		// 		return *this;  // Handle self-assignment
+		// 	}
 
-			std::unique_lock locker(mtx_);
-			std::unique_lock other_locker(other.mtx_);
+		// 	std::unique_lock locker(mtx_);
+		// 	std::unique_lock other_locker(other.mtx_);
 
-			max_length_ = other.max_length_;
-			vector_size_ = other.vector_size_;
-			use_vector_ = other.use_vector_;
-			closed_ = other.closed_;
+		// 	max_length_ = other.max_length_;
+		// 	vector_size_ = other.vector_size_;
+		// 	use_vector_ = other.use_vector_;
+		// 	closed_ = other.closed_;
 
-			if (use_vector_) {
-				const auto& other_queues = std::get<std::vector<std::queue<value_type>>>(other.buffer_);
-				buffer_ = other_queues;  // Copy the contents
-			} else {
-				const auto& other_queue = std::get<std::queue<value_type>>(other.buffer_);
-				buffer_ = other_queue;  // Copy the contents
-			}
+		// 	if (use_vector_) {
+		// 		const auto& other_queues = std::get<std::vector<std::queue<value_type>>>(other.buffer_);
+		// 		buffer_ = other_queues;  // Copy the contents
+		// 	} else {
+		// 		const auto& other_queue = std::get<std::queue<value_type>>(other.buffer_);
+		// 		buffer_ = other_queue;  // Copy the contents
+		// 	}
 
-			return *this;
-		}
+		// 	return *this;
+		// }
 
 		std::optional<value_type> next(int id) {
 				std::unique_lock locker(mtx_);
@@ -151,3 +151,4 @@ private:
 			}
 		}
 };
+
